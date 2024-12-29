@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { userService } from './user.service';
+import sendResponse from '../../utils/sendResponse';
 
 // Create a User
 
@@ -9,9 +11,9 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 
     const result = await userService.createUser(payload);
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: StatusCodes.CREATED,
       message: 'User created successfully',
-      success: true,
       data: result,
     });
   } catch (err) {
