@@ -9,10 +9,14 @@ const register = handleCatchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.register(req.body);
 
   sendResponse(res, {
-    status: true,
+    success: true,
     message: 'User registered successfully',
     statusCode: StatusCodes.CREATED,
-    data: result,
+    data: {
+      _id: result._id.toString(),
+      name: result.name,
+      email: result.email,
+    },
   });
 });
 
@@ -21,7 +25,7 @@ const login = handleCatchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.login(req.body);
 
   sendResponse(res, {
-    status: true,
+    success: true,
     message: 'Login successful',
     statusCode: StatusCodes.OK,
     data: {

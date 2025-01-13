@@ -1,19 +1,19 @@
 import { StatusCodes } from 'http-status-codes';
-import { userService } from './user.service';
 import sendResponse from '../../utils/sendResponse';
 import handleCatchAsync from '../../utils/handleCatchAsync';
+import { UserService } from './user.service';
 
-// Create a User
-const createUser = handleCatchAsync(async (req, res) => {
-  const payload = req.body;
-  const result = await userService.createUser(payload);
+// Get User
+const getAllUser = handleCatchAsync(async (req, res) => {
+  const result = await UserService.getAllUser();
+
   sendResponse(res, {
-    statusCode: StatusCodes.CREATED,
-    message: 'User created successfully',
+    statusCode: StatusCodes.OK,
+    message: 'Users getting successfully',
     data: result,
   });
 });
 
 export const userController = {
-  createUser,
+  getAllUser,
 };
