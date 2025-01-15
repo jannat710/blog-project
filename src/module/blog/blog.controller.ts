@@ -44,9 +44,19 @@ const updateBlog = handleCatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteBlog = handleCatchAsync(async (req, res) => {
-  const blogId = req.params.blogId;
-  await BlogService.deleteBlog(blogId);
+// Delete Blog
+const deleteBlog = handleCatchAsync(async (req: Request, res: Response) => {
+  const blogId = req.params.id;
+  const author = req.user?._id;
+
+  if (!author) {
+    return res.status(400).json({
+      success: false,
+      message: 'User not authenticated or invalid user',
+    });
+  }
+
+  await BlogService.deleteBlog(blogId, author);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

@@ -28,7 +28,11 @@ const auth = (...requiredRoles: string[]) => {
           .status(403)
           .json({ success: false, message: 'You are not authorized' });
       }
-      req.user = decoded;
+      req.user = {
+        _id: user._id,
+        email: user.email,
+        role: user.role,
+      };
       next();
     },
   );

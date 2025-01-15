@@ -34,9 +34,26 @@ const updateBlog = async (id: string, updateData: Partial<IBlog>) => {
 };
 
 //Delete a blog
-const deleteBlog = async (id: string) => {
-  const result = await Blog.findByIdAndDelete(id);
-  return result;
+const deleteBlog = async (blogId: string, authorId: string) => {
+  if (!authorId) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Author ID is missing');
+  }
+
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
+  }
+
+  if (blog.author.toString() !== authorId.toString()) {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      'You are not authorized to delete this blog',
+    );
+  }
+
+  await Blog.findByIdAndDelete(blogId);
+
+  return blog;
 };
 
 export const BlogService = {
