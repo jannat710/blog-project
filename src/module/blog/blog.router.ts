@@ -25,4 +25,7 @@ blogRouter.patch(
 // Delete a blog
 blogRouter.delete('/:id', auth('user'), BlogController.deleteBlog);
 
+//Get all blogs
+blogRouter.get('/', BlogController.getAllBlogs);
+
 export default blogRouter;

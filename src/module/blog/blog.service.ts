@@ -56,8 +56,15 @@ const deleteBlog = async (blogId: string, authorId: string) => {
   return blog;
 };
 
+//Get all blogs
+const getAllBlogs = async () => {
+  const result = await Blog.find();
+  return result;
+};
+
 export const BlogService = {
   createBlog,
   updateBlog,
   deleteBlog,
+  getAllBlogs,
 };
