@@ -72,7 +72,12 @@ const getAllBlogs = handleCatchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     message: 'Blogs fetched successfully',
-    data: result,
+    data: result.map((blog) => ({
+      _id: blog._id,
+      title: blog.title,
+      content: blog.content,
+      author: blog.author,
+    })),
   });
 });
 

@@ -6,7 +6,7 @@ export const handleCastError = (err: any, res: Response) => {
     success: false,
     message: err.message,
     statusCode: StatusCodes.BAD_REQUEST,
-    errorddd: err,
+    error: err,
     stack: err.stack || 'No stack trace available',
   });
 };

@@ -71,7 +71,7 @@ const getAllBlogs = async (query: Record<string, unknown>) => {
   queryBuilder.sort();
 
   queryBuilder.select();
-  const result = await queryBuilder.modelQuery;
+  const result = await queryBuilder.modelQuery.populate('author', 'name email');
 
   return result;
 };

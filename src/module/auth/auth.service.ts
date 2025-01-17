@@ -5,7 +5,15 @@ import AppError from '../../errors/AppError';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+// Register
 const register = async (payload: IUser) => {
+  if (payload.role === 'admin') {
+    const isAdminExists = await User.findOne({ role: 'admin' });
+    if (isAdminExists) {
+      throw new AppError(StatusCodes.FORBIDDEN, 'Admin already exists');
+    }
+  }
+
   const result = await User.create(payload);
   return result;
 };
