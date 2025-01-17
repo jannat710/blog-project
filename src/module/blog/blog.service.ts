@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../errors/AppError';
 import { IBlog } from './blog.interface';
 import Blog from './blog.model';
+import QueryBuilder from '../../builder/queryBuilder';
 
 const createBlog = async (payload: IBlog) => {
   const result = await Blog.create(payload);
@@ -57,8 +58,21 @@ const deleteBlog = async (blogId: string, authorId: string) => {
 };
 
 //Get all blogs
-const getAllBlogs = async () => {
-  const result = await Blog.find();
+const getAllBlogs = async (query: Record<string, unknown>) => {
+  const queryBuilder = new QueryBuilder(Blog.find(), query);
+
+  //search
+  queryBuilder.search(['title', 'content']);
+
+  //filtering
+  queryBuilder.filter();
+
+  //sorting
+  queryBuilder.sort();
+
+  queryBuilder.select();
+  const result = await queryBuilder.modelQuery;
+
   return result;
 };
 
