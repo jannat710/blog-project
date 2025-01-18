@@ -20,7 +20,6 @@ const getAllUser = handleCatchAsync(async (req, res) => {
 const blockUser = handleCatchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  // Check if the requesting user is an admin
   if (req.user.role !== 'admin') {
     throw new AppError(
       StatusCodes.FORBIDDEN,
@@ -28,7 +27,6 @@ const blockUser = handleCatchAsync(async (req: Request, res: Response) => {
     );
   }
 
-  // Call the service to block the user
   const blockedUser = await UserService.blockUser(userId);
 
   sendResponse(res, {

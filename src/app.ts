@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use('/api', userRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/blogs', blogRouter);
+app.use('/api', blogRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Server is running 🚀🚀');

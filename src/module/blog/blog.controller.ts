@@ -26,16 +26,15 @@ const createBlog = handleCatchAsync(async (req: Request, res: Response) => {
 // Update Blog
 const updateBlog = handleCatchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, content, author } = req.body;
+  const { title, content } = req.body;
+  const author = req.user?._id;
   if (!author) {
     throw new AppError(
       StatusCodes.UNAUTHORIZED,
       'You are not authorized to update this blog',
     );
   }
-
   const result = await BlogService.updateBlog(id, { title, content, author });
-
   sendResponse(res, {
     success: true,
     message: 'Blog updated successfully',
@@ -44,26 +43,43 @@ const updateBlog = handleCatchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Delete Blog
-const deleteBlog = handleCatchAsync(async (req: Request, res: Response) => {
-  const blogId = req.params.id;
-  const author = req.user?._id;
+//User Delete Blog
+const deleteBlogByUser = handleCatchAsync(
+  async (req: Request, res: Response) => {
+    const blogId = req.params.id;
+    const author = req.user?._id;
 
-  if (!author) {
-    return res.status(400).json({
-      success: false,
-      message: 'User not authenticated or invalid user',
+    if (!author) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not authenticated or invalid user',
+      });
+    }
+
+    await BlogService.deleteBlogByUser(blogId, author);
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Blog deleted successfully',
+      data: {},
     });
-  }
+  },
+);
 
-  await BlogService.deleteBlog(blogId, author);
+// Admin Delete Blog
+const deleteBlogByAdmin = handleCatchAsync(
+  async (req: Request, res: Response) => {
+    const blogId = req.params.id;
 
-  sendResponse(res, {
-    statusCode: StatusCodes.OK,
-    message: 'Blog deleted successfully',
-    data: {},
-  });
-});
+    await BlogService.deleteBlogByAdmin(blogId);
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Blog deleted successfully',
+      data: {},
+    });
+  },
+);
 
 //Get All Blogs
 const getAllBlogs = handleCatchAsync(async (req, res) => {
@@ -84,6 +100,7 @@ const getAllBlogs = handleCatchAsync(async (req, res) => {
 export const BlogController = {
   createBlog,
   updateBlog,
-  deleteBlog,
+  deleteBlogByUser,
   getAllBlogs,
+  deleteBlogByAdmin,
 };

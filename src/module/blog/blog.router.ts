@@ -8,7 +8,7 @@ const blogRouter = Router();
 
 // Create Blog route
 blogRouter.post(
-  '/',
+  '/blogs',
   auth('user'),
   validateRequest(BlogValidation.blogValidationSchema),
   BlogController.createBlog,
@@ -16,16 +16,23 @@ blogRouter.post(
 
 // Update Blog route
 blogRouter.patch(
-  '/:id',
+  '/blogs/:id',
   auth('user'),
   validateRequest(BlogValidation.blogValidationSchema),
   BlogController.updateBlog,
 );
 
-// Delete a blog
-blogRouter.delete('/:id', auth('user'), BlogController.deleteBlog);
+//Route for users to delete a blog
+blogRouter.delete('/blogs/:id', auth('user'), BlogController.deleteBlogByUser);
 
 //Get all blogs
-blogRouter.get('/', BlogController.getAllBlogs);
+blogRouter.get('/blogs', BlogController.getAllBlogs);
+
+// Route for admins to delete any blog
+blogRouter.delete(
+  '/admin/blogs/:id',
+  auth('admin'),
+  BlogController.deleteBlogByAdmin,
+);
 
 export default blogRouter;

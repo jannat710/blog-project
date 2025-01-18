@@ -34,8 +34,8 @@ const updateBlog = async (id: string, updateData: Partial<IBlog>) => {
   return blog;
 };
 
-//Delete a blog
-const deleteBlog = async (blogId: string, authorId: string) => {
+//Delete a blog by user
+const deleteBlogByUser = async (blogId: string, authorId: string) => {
   if (!authorId) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Author ID is missing');
   }
@@ -54,6 +54,16 @@ const deleteBlog = async (blogId: string, authorId: string) => {
 
   await Blog.findByIdAndDelete(blogId);
 
+  return blog;
+};
+
+// Admin Delete Blog
+const deleteBlogByAdmin = async (blogId: string) => {
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Blog not found');
+  }
+  await Blog.findByIdAndDelete(blogId);
   return blog;
 };
 
@@ -79,6 +89,7 @@ const getAllBlogs = async (query: Record<string, unknown>) => {
 export const BlogService = {
   createBlog,
   updateBlog,
-  deleteBlog,
+  deleteBlogByUser,
   getAllBlogs,
+  deleteBlogByAdmin,
 };

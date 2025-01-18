@@ -13,7 +13,7 @@ const blogValidationSchema = z.object({
         required_error: 'Content must be provided and must be a string',
       })
       .min(3)
-      .max(50),
+      .max(250),
 
     author: z.string().refine((val) => Types.ObjectId.isValid(val), {
       message: 'Author must be a valid ObjectId',
