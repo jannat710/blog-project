@@ -182,4 +182,4 @@ json
 
 ## Live Deployment Link
 
-Live URL: Blog Platform API
+- #### [Blog Project Live URL](https://blog-project-henna.vercel.app)
